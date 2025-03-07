@@ -1,6 +1,9 @@
+// mengimpor dotenv dan menjalankan konfigurasinya
+require('dotenv').config();
+
 const Hapi = require('@hapi/hapi');
 const notes = require('./api/notes');
-const NotesService = require('./services/inMemory/notesServices');
+const NotesService = require('./services/postgres/NotesService');
 const NotesValidator = require('./validator/notes');
 const ClientError = require('./exceptions/ClientError');
 
@@ -11,8 +14,8 @@ const init = async () => {
     const notesServices = new NotesService();
 
     server = Hapi.server({
-      port: process.env.PORT || 3000,
-      host: '0.0.0.0',
+      port: process.env.PORT,
+      host: process.env.HOST,
       routes: {
         cors: {
           origin: ['*'],
@@ -41,12 +44,20 @@ const init = async () => {
       return h.continue;
     });
 
-    await server.initialize(); // Hanya inisialisasi tanpa start()
+    // Jika dijalankan di vercel
+    await server.initialize();
+    
+    // Jika dijalankan di localhost
+    // await server.start();
+    // console.log(`Server berjalan pada ${server.info.uri}`);
   }
   return server;
 };
 
-// Handler untuk Vercel
+// Jika dijalankan di localhost
+// init();
+
+// Jika dijalankan di vercel
 module.exports = async (req, res) => {
   const server = await init();
   
