@@ -8,7 +8,7 @@
   ],
   "routes": [
     {
-      "src": "/api/notes/routes.js",
+      "src": "/notes(.*)",
       "dest": "src/server_vercel.js"
     }
   ]
