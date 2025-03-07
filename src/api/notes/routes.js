@@ -1,12 +1,12 @@
 const routes = (handler) => [
   {
     method: 'POST',
-    path: '/api/notes',
+    path: '/notes',
     handler: handler.postNoteHandler,
   },
   {
     method: 'GET',
-    path: '/api/notes',
+    path: '/notes',
     handler: handler.getNotesHandler,
   },
   {
