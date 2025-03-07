@@ -1,8 +1,10 @@
 const Hapi = require('@hapi/hapi');
-const { notes } = require('./api/notes');
+const notes = require('./api/notes');
 const NotesService = require('./services/inMemory/notesServices');
 const NotesValidator = require('./validator/notes');
 const ClientError = require('./exceptions/ClientError');
+const NotesHandler = require('./handler');
+const routes = require('./routes');
 
 const init = async () => {
   const notesServices = new NotesService();
@@ -17,8 +19,23 @@ const init = async () => {
     },
   });
 
+  // await server.register({
+  //   plugin: notes,
+  //   options: {
+  //     service: notesServices,
+  //     validator: NotesValidator,
+  //   },
+  // });
+
   await server.register({
-    plugin: notes(),
+    plugin:  {
+      name: 'notes',
+      version: '1.0.0',
+      register: async (server, { service, validator }) => {
+        const notesHandler = new NotesHandler(service, validator);
+        server.route(routes(notesHandler));
+      },
+    },
     options: {
       service: notesServices,
       validator: NotesValidator,
