@@ -1,61 +1,49 @@
-const Hapi = require('@hapi/hapi');
-const notes = require('./api/notes');
-const NotesService = require('./services/inMemory/notesServices');
-const NotesValidator = require('./validator/notes');
-const ClientError = require('./exceptions/ClientError');
+// const Hapi = require('@hapi/hapi');
+// const notes = require('./api/notes');
+// const NotesService = require('./services/inMemory/notesServices');
+// const NotesValidator = require('./validator/notes');
+// const ClientError = require('./exceptions/ClientError');
 
-let server;
+// const init = async () => {
+//   const notesServices = new NotesService();
 
-const init = async () => {
-  if (!server) {
-    const notesServices = new NotesService();
+//   const server = Hapi.server({
+//     port: 5000,
+//     host: process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0',
+//     routes: {
+//       cors: {
+//         origin: ['*'],
+//       },
+//     },
+//   });
 
-    server = Hapi.server({
-      port: process.env.PORT || 3000,
-      host: '0.0.0.0',
-      routes: {
-        cors: {
-          origin: ['*'],
-        },
-      },
-    });
+//   await server.register({
+//     plugin: notes,
+//     options: {
+//       service: notesServices,
+//       validator: NotesValidator,
+//     },
+//   });
 
-    await server.register({
-      plugin: notes,
-      options: {
-        service: notesServices,
-        validator: NotesValidator,
-      },
-    });
-
-    server.ext('onPreResponse', (request, h) => {
-      const { response } = request;
-      if (response instanceof ClientError) {
-        const newResponse = h.response({
-          status: 'fail',
-          message: response.message,
-        });
-        newResponse.code(response.statusCode);
-        return newResponse;
-      }
-      return h.continue;
-    });
-
-    await server.initialize(); // Hanya inisialisasi tanpa start()
-  }
-  return server;
-};
-
-// Handler untuk Vercel
-module.exports = async (req, res) => {
-  const server = await init();
+//   server.ext('onPreResponse', (request, h) => {
+//     // mendapatkan konteks response dari request
+//     const { response } = request;
   
-  const response = await server.inject({
-    method: req.method,
-    url: req.url,
-    payload: req.body,
-    headers: req.headers
-  });
+//     // penanganan client error secara internal.
+//     if (response instanceof ClientError) {
+//       const newResponse = h.response({
+//         status: 'fail',
+//         message: response.message,
+//       });
+//       newResponse.code(response.statusCode);
+//       return newResponse;
+//     }
+      
+//     return h.continue;
+//   });
 
-  res.status(response.statusCode).json(response.result);
-};
+//   await server.start();
+//   console.log(`Server berjalan pada ${server.info.uri}`);
+// };
+
+// init();
