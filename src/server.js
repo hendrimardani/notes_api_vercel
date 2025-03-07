@@ -46,4 +46,7 @@ const init = async () => {
   console.log(`Server berjalan pada ${server.info.uri}`);
 };
 
-init();
+// init();
+
+// Ekspor fungsi init agar bisa dijalankan oleh Vercel
+module.exports = init;
