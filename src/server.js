@@ -1,5 +1,5 @@
 const Hapi = require('@hapi/hapi');
-const notes = require('./api/notes');
+// const notes = require('./api/notes');
 const NotesService = require('./services/inMemory/notesServices');
 const NotesValidator = require('./validator/notes');
 const ClientError = require('./exceptions/ClientError');
