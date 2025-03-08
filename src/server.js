@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const Hapi = require('@hapi/hapi');
 const notes = require('./api/notes');
-const NotesService = require('./services/postgres/NotesService');
+const NotesService = require('./services/supabase/NotesService');
 const NotesValidator = require('./validator/notes');
 const ClientError = require('./exceptions/ClientError');
 
@@ -48,25 +48,22 @@ const init = async () => {
     await server.initialize();
     
     // Jika dijalankan di localhost
-    // await server.start();
-    // console.log(`Server berjalan pada ${server.info.uri}`);
+    await server.start();
+    console.log(`Server berjalan pada ${server.info.uri}`);
   }
   return server;
 };
 
-// Jika dijalankan di localhost
-// init();
-
-// Jika dijalankan di vercel
-module.exports = async (req, res) => {
-  const server = await init();
+init();
+// module.exports = async (req, res) => {
+//   const server = await init();
   
-  const response = await server.inject({
-    method: req.method,
-    url: req.url,
-    payload: req.body,
-    headers: req.headers
-  });
+//   const response = await server.inject({
+//     method: req.method,
+//     url: req.url,
+//     payload: req.body,
+//     headers: req.headers
+//   });
 
-  res.status(response.statusCode).json(response.result);
-};
+//   res.status(response.statusCode).json(response.result);
+// };
