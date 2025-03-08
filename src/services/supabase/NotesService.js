@@ -35,6 +35,7 @@ class NotesService {
   async getNoteById(id) {
     const { data, error } = await this._supabase
                             .from(this._TABLE)
+                            .select('*')
                             .eq('id', id);
     if (error) {
       throw new NotFoundError('Catatan tidak ditemukan');
@@ -42,17 +43,17 @@ class NotesService {
     return data.map(mapDBToModel)[0];    
   }
 
-  async editNoteById(id, { title, body, tags }) {
+  async editNoteById(id, newTitle, newTags, newBody) {
     const updatedAt = new Date().toISOString();
-
     const { data, error } = this._supabase
                             .from(this._TABLE)
                             .update({
-                              title: title,
-                              body: body,
-                              tags: tags,
+                              title: "newTitle",
+                              body: "newBody",
+                              tags: ["newTags", "asdasda"],
                               updatedAt: updatedAt
-                            });
+                            })
+                            .eq('id', id);
     if (error) {
       throw new NotFoundError('Gagal memperbarui catatan. Id tidak ditemukan');
     }

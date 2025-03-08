@@ -52,8 +52,8 @@ class NotesHandler {
   async putNoteByIdHandler(request, h) {
     this._validator.validateNotePayload(request.payload);
     const { id } = request.params;
-
-    await this._service.editNoteById(id, request.payload);
+    const { title, tags, body } = request.payload;
+    await this._service.editNoteById(id, title, tags, body);
 
     return {
       status: 'success',
