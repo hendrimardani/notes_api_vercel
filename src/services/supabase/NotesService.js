@@ -12,14 +12,13 @@ class NotesService {
 
   async addNote({ title, body, tags }) {
     const id = nanoid(16);
-    const createdAt = new Date().toISOString();
-    const updatedAt = createdAt;
+    const created_at = new Date().toISOString();
+    const updated_at = created_at;
 
     const { data, error } = await this._supabase
                             .from(this._TABLE)
-                            .insert([
-                              { id: id, title: title, body: body, tags: tags, createdAt: createdAt, updatedAt: updatedAt}
-                            ]);
+                            .insert([{ id, title, body, tags, created_at, updated_at }]).select();
+    // console.log(data, error);
     if (error) {
       throw new InvariantError('Catatan gagal ditambahkan');
     }
