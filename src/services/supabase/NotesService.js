@@ -17,7 +17,8 @@ class NotesService {
 
     const { data } = await this._supabase
                             .from(this._TABLE)
-                            .insert([{ id, title, body, tags, created_at, updated_at }]).select();
+                            .insert([{ id, title, body, tags, created_at, updated_at }])
+                            .select();
     // console.log(data);
     if (data.length === 0) {
       throw new InvariantError('Catatan gagal ditambahkan');
